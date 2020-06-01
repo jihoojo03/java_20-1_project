@@ -9,7 +9,8 @@ public class GUITest extends JFrame {
 	private Image screenImage;
 	private Graphics screenGraphic;
 
-	private Image introBackground = new ImageIcon(Main.class.getResource("../images/introbackground.jpg")).getImage();
+	private Image gameBackground = new ImageIcon(Main.class.getResource("../images/hotelRoom.png")).getImage();
+	private Image background = new ImageIcon(Main.class.getResource("../images/introbackground.jpg")).getImage();
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.jpg")));
 
 	private ImageIcon exitButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/exitButton.jpg"));
@@ -19,7 +20,12 @@ public class GUITest extends JFrame {
 	private JButton exitButton = new JButton(exitButtonEnteredImage);
 	private JButton startButton = new JButton(startButtonBasicImage);
 
+	private JLabel textBox = new JLabel();
+	private JLabel nameBox = new JLabel();
+	
 	private int mouseX, mouseY;
+	
+	private boolean isGameScreen = false;
 
 	GUITest() {
 		createMenu();
@@ -32,7 +38,11 @@ public class GUITest extends JFrame {
 		setVisible(true);
 		setBackground(new Color(0, 0, 0, 0));
 		setLayout(null);
-
+		
+		Music introMusic = new Music("01_introMusic.mp3", true);
+		introMusic.start();
+		
+		
 		exitButton.setBounds(430, 00, 50, 30);
 		exitButton.setBorderPainted(false);
 		exitButton.setContentAreaFilled(false);
@@ -50,6 +60,11 @@ public class GUITest extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+				try {
+					Thread.sleep(500);
+				} catch(InterruptedException ex) {
+					ex.printStackTrace();
+				}
 				System.exit(0);
 			}
 
@@ -75,7 +90,14 @@ public class GUITest extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// 게임 시작 이벤트
+				startButton.setVisible(false);
+				background = new ImageIcon(Main.class.getResource("../images/introbackground.jpg")).getImage();
+				introMusic.close();
+				isGameScreen = true;
+				
+				add(textBox);
+				add(nameBox);
+				
 			}
 
 		});
@@ -101,9 +123,11 @@ public class GUITest extends JFrame {
 		
 		
 
+
+
 	}
 
-	void createMenu() {
+	public void createMenu() {
 		JMenuBar mb = new JMenuBar();
 		JMenu screenMenu = new JMenu("스토리");
 
@@ -128,7 +152,10 @@ public class GUITest extends JFrame {
 	}
 
 	public void screenDraw(Graphics g) {
-		g.drawImage(introBackground, 0, 30, null);
+		g.drawImage(background, 0, 30, null);
+		if(isGameScreen) {
+			g.drawImage(gameBackground, 0, 30, null);
+		}
 		paintComponents(g);
 		this.repaint();
 	}
