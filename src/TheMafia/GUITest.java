@@ -95,6 +95,16 @@ public class GUITest extends JFrame {
 				introMusic.close();
 				isGameScreen = true;
 				
+				nameBox.setText("Kyle");
+				textBox.setText("<html><body>치킨 먹고싶다...<br>치킨은 역시 BBQ...<br>아니...! 땅땅 3번도 진리야</body></html>");
+				nameBox.setBounds(30, 470, 80, 30);
+				textBox.setBounds(30, 540, 480, 180);
+				nameBox.setFont(new Font("Serif", Font.BOLD, 25));
+				textBox.setFont(new Font("Serif", Font.PLAIN, 30));
+				textBox.setVerticalAlignment(SwingConstants.TOP);
+				textBox.setHorizontalAlignment(SwingConstants.LEFT);
+				nameBox.setForeground(Color.WHITE);
+				textBox.setForeground(Color.WHITE);
 				add(textBox);
 				add(nameBox);
 				
