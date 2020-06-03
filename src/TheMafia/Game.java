@@ -3,15 +3,15 @@ package TheMafia;
 import java.io.*;
 
 public class Game {
-	public String script[][] = new String[1000][5];
-	public int Row = 0;
-	public int Col = 5;
-	public int firstId = 0;
+	private String script[][] = new String[1000][5];
+	private int Row = 0;
+	private int Col = 5;
+	private int firstId = 0;
 	
 	public void readCsv(String part) {
 		
 		int row =0 ,i=0;
-		File csv = new File("C:\\exer\\story.csv"); //.csv 파일 저장위치에 따라 수정 필요 
+		File csv = new File("../script/story.csv"); //.csv 파일 저장위치에 따라 수정 필요 
 		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(csv));

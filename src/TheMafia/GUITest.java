@@ -23,6 +23,8 @@ public class GUITest extends JFrame {
 	private JLabel textBox = new JLabel();
 	private JLabel nameBox = new JLabel();
 	
+	private Music backgroundMusic = new Music("01_introMusic.mp3", true);
+	
 	private int mouseX, mouseY;
 	
 	private boolean isGameScreen = false;
@@ -39,10 +41,44 @@ public class GUITest extends JFrame {
 		setBackground(new Color(0, 0, 0, 0));
 		setLayout(null);
 		
-		Music introMusic = new Music("01_introMusic.mp3", true);
-		introMusic.start();
+		musicStart();
+		makeExitButton();
+		makeMenuBar();
+		makeStartButton();
 		
-		
+	}
+	
+	public void musicStart() {
+		backgroundMusic.start();
+	}
+	
+	public void musicEnd() {
+		backgroundMusic.close();
+	}
+	
+	public void musicChange(String musicName) {
+		backgroundMusic = new Music(musicName, true);
+	}
+	
+
+	public void createMenu() {
+		JMenuBar mb = new JMenuBar();
+		JMenu screenMenu = new JMenu("스토리");
+
+		screenMenu.add(new JMenuItem("진행상황"));
+		screenMenu.add(new JMenuItem("분기점 선택"));
+		screenMenu.add(new JMenuItem("등장인물"));
+		screenMenu.addSeparator();
+		screenMenu.add(new JMenuItem("Exit"));
+
+		mb.add(screenMenu);
+		mb.add(new JMenu("편집"));
+		mb.add(new JMenu("실행"));
+		mb.add(new JMenu("도움말"));
+		setJMenuBar(mb);
+	}
+	
+	public void makeExitButton() {
 		exitButton.setBounds(430, 00, 50, 30);
 		exitButton.setBorderPainted(false);
 		exitButton.setContentAreaFilled(false);
@@ -70,7 +106,29 @@ public class GUITest extends JFrame {
 
 		});
 		add(exitButton);
+	}
+	
+	public void makeMenuBar() {
+		menuBar.setBounds(0, 0, 480, 30);
+		menuBar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				mouseX = e.getX();
+				mouseY = e.getY();
+			}
+		});
+		menuBar.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				int x = e.getXOnScreen();
+				int y = e.getYOnScreen();
+				setLocation(x - mouseX, y - mouseY - 30);
+			}
+		});
+		add(menuBar);
+	}
 
+	public void makeStartButton() {
 		startButton.setBounds(120, 500, 240, 80);
 		startButton.setBorderPainted(false);
 		startButton.setContentAreaFilled(false);
@@ -91,69 +149,39 @@ public class GUITest extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				startButton.setVisible(false);
-				background = new ImageIcon(Main.class.getResource("../images/introbackground.jpg")).getImage();
-				introMusic.close();
+				musicEnd();
 				isGameScreen = true;
 				
-				nameBox.setText("Kyle");
-				textBox.setText("<html><body>치킨 먹고싶다...<br>치킨은 역시 BBQ...<br>아니...! 땅땅 3번도 진리야</body></html>");
-				nameBox.setBounds(30, 470, 80, 30);
-				textBox.setBounds(30, 540, 480, 180);
-				nameBox.setFont(new Font("Serif", Font.BOLD, 25));
-				textBox.setFont(new Font("Serif", Font.PLAIN, 30));
-				textBox.setVerticalAlignment(SwingConstants.TOP);
-				textBox.setHorizontalAlignment(SwingConstants.LEFT);
-				nameBox.setForeground(Color.WHITE);
-				textBox.setForeground(Color.WHITE);
-				add(textBox);
-				add(nameBox);
+				Game game = new Game();
 				
+				showName();
+				showText();
+	
 			}
 
 		});
 		add(startButton);
 
-		menuBar.setBounds(0, 0, 480, 30);
-		menuBar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				mouseX = e.getX();
-				mouseY = e.getY();
-			}
-		});
-		menuBar.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				int x = e.getXOnScreen();
-				int y = e.getYOnScreen();
-				setLocation(x - mouseX, y - mouseY - 30);
-			}
-		});
-		add(menuBar);
-		
-		
-
-
-
 	}
-
-	public void createMenu() {
-		JMenuBar mb = new JMenuBar();
-		JMenu screenMenu = new JMenu("스토리");
-
-		screenMenu.add(new JMenuItem("진행상황"));
-		screenMenu.add(new JMenuItem("분기점 선택"));
-		screenMenu.add(new JMenuItem("등장인물"));
-		screenMenu.addSeparator();
-		screenMenu.add(new JMenuItem("Exit"));
-
-		mb.add(screenMenu);
-		mb.add(new JMenu("편집"));
-		mb.add(new JMenu("실행"));
-		mb.add(new JMenu("도움말"));
-		setJMenuBar(mb);
+	
+	public void showName(){
+		nameBox.setText("Kyle");
+		nameBox.setBounds(30, 470, 80, 30);
+		nameBox.setFont(new Font("Serif", Font.BOLD, 25));
+		nameBox.setForeground(Color.WHITE);
+		add(nameBox);
 	}
-
+	
+	public void showText() {
+		textBox.setText("<html><body>치킨 먹고싶다...<br>치킨은 역시 BBQ...<br>아니...! 땅땅 3번도 진리야</body></html>");
+		textBox.setBounds(30, 540, 480, 180);
+		textBox.setFont(new Font("Serif", Font.PLAIN, 30));
+		textBox.setVerticalAlignment(SwingConstants.TOP);
+		textBox.setHorizontalAlignment(SwingConstants.LEFT);
+		textBox.setForeground(Color.WHITE);
+		add(textBox);
+	}
+	
 	public void paint(Graphics g) {
 		screenImage = createImage(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
 		screenGraphic = screenImage.getGraphics();
