@@ -1,12 +1,13 @@
 package TheMafia;
 
+
 import java.io.*;
 
 public class Game {
-	private String script[][] = new String[1000][5];
-	private int Row = 0;
-	private int Col = 5;
-	private int firstId = 0;
+	public String script[][] = new String[1000][6];
+	public int Row = 0;
+	public int Col = 5;
+	public int firstId = 0;
 	
 	public void readCsv(String part) {
 		
@@ -26,8 +27,12 @@ public class Game {
 				}
 				if(token.length>6) {
 					for(i=6; i<token.length;i++) {
-						token[5] = token[5] + token[i];
+						token[5] = token[5] +','+token[i];
 					}
+				}
+				if(token[5].startsWith("\"")) {
+				token[5] = token[5].substring(1);
+				token[5] = token[5].substring(0,token[5].length() - 1);
 				}
 				for(i=0;i<Col;i++) {
 					script[row][i] = token[i+1];
@@ -110,6 +115,23 @@ public class Game {
 	
 	public int getTotalNum() {
 		return Row;
+	}
+	
+	public int getNextId(int id) {
+		String ID = Integer.toString(id);
+		String nextId = "";
+		int intNextId = 0;
+		for(int i=0;i<Row;i++) {
+			if(script[i][0].equals(ID)) {
+				if(i==Row-1) {
+					return 0;
+				}
+				nextId = script[i+1][0];
+				break;
+			}
+		}
+		intNextId = Integer.parseInt(nextId);
+		return intNextId;
 	}
 	
 }

@@ -54,8 +54,6 @@ public class GUITest extends JFrame {
 		makeStartButton();
 		
 	}
-	
-	
 
 	public void createMenu() {
 		JMenuBar mb = new JMenuBar();
@@ -169,6 +167,10 @@ public class GUITest extends JFrame {
 		int userNum = game.getCharacter(currentId);
 		if(userNum == 1) nameBox.setText("Kyle");
 		else if(userNum == 2) nameBox.setText("Rachel");
+		else if(userNum == 3) nameBox.setText("Brad");
+		else if(userNum == 4) nameBox.setText("Erica");
+		else if(userNum == 5) nameBox.setText("Alex");
+		else if(userNum == 6) nameBox.setText("Neal");
 		
 		nameBox.setBounds(30, 470, 80, 30);
 		nameBox.setFont(new Font("Serif", Font.BOLD, 25));
@@ -197,7 +199,7 @@ public class GUITest extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if((currentId % 1000) < currentTotalNum) currentId++;
+				if((currentId % 1000) < currentTotalNum) currentId = game.getNextId(currentId);
 				
 				textBox.setText(game.getScript(currentId));
 				setGraphic(game.getPlace(currentId));
@@ -244,19 +246,58 @@ public class GUITest extends JFrame {
 		if(currentMusic != num) {
 			if(num == 0) musicEnd();
 			if(num == 1) {
+				musicEnd();
 				backgroundMusic = new Music("01_introMusic.mp3", true);
 				musicStart();
 			}
 			else if(num == 2) {
+				musicEnd();
 				backgroundMusic = new Music("02_search.mp3", true);
 				musicStart();
 			}
+			else if(num == 3) {
+				musicEnd();
+				backgroundMusic = new Music("03_dark.mp3", true);
+				musicStart();
+			}
+			else if(num == 4) {
+				musicEnd();
+				backgroundMusic = new Music("04_danger.mp3", true);
+				musicStart();
+			}
+			else if(num == 5) {
+				musicEnd();
+				backgroundMusic = new Music("05_urgency.mp3", true);
+				musicStart();
+			}
+			else if(num == 6) {
+				musicEnd();
+				backgroundMusic = new Music("06_conflict.mp3", true);
+				musicStart();
+			}
+			else if(num == 7) {
+				musicEnd();
+				backgroundMusic = new Music("07_expose.mp3", true);
+				musicStart();
+			}
+			else if(num == 8) {
+				musicEnd();
+				backgroundMusic = new Music("08_nothingness.mp3", true);
+				musicStart();
+			}
+			else if(num == 9) {
+				musicEnd();
+				backgroundMusic = new Music("09_theEnd.mp3", true);
+				musicStart();
+			}
+			else if(num == 10) {
+				musicEnd();
+				backgroundMusic = new Music("10_scary.mp3", true);
+				musicStart();
+			}
+			
 		}
 		currentMusic = num;
-	}
-	
-	public void musicListener() {
-		
 	}
 
 }
