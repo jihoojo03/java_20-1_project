@@ -11,7 +11,7 @@ public class Game {
 	public void readCsv(String part) {
 		
 		int row =0 ,i=0;
-		File csv = new File("../script/story.csv"); //.csv 파일 저장위치에 따라 수정 필요 
+		File csv = new File("C://story.csv"); //.csv 파일 저장위치에 따라 수정 필요 
 		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(csv));

@@ -25,9 +25,16 @@ public class GUITest extends JFrame {
 	
 	private Music backgroundMusic = new Music("01_introMusic.mp3", true);
 	
+	private Game game = new Game();
+	
 	private int mouseX, mouseY;
 	
 	private boolean isGameScreen = false;
+	
+	private String currentPart;
+	private int currentId;
+	private int currentTotalNum;
+	private int currentMusic;
 
 	GUITest() {
 		createMenu();
@@ -48,17 +55,6 @@ public class GUITest extends JFrame {
 		
 	}
 	
-	public void musicStart() {
-		backgroundMusic.start();
-	}
-	
-	public void musicEnd() {
-		backgroundMusic.close();
-	}
-	
-	public void musicChange(String musicName) {
-		backgroundMusic = new Music(musicName, true);
-	}
 	
 
 	public void createMenu() {
@@ -152,11 +148,16 @@ public class GUITest extends JFrame {
 				musicEnd();
 				isGameScreen = true;
 				
-				Game game = new Game();
+				currentPart = "1";
+				game.readCsv(currentPart);
+				currentId = game.getFirstId();
+				currentTotalNum = game.getTotalNum();
+				System.out.println(currentId);
+				System.out.println(currentTotalNum);
 				
 				showName();
 				showText();
-	
+
 			}
 
 		});
@@ -165,7 +166,10 @@ public class GUITest extends JFrame {
 	}
 	
 	public void showName(){
-		nameBox.setText("Kyle");
+		int userNum = game.getCharacter(currentId);
+		if(userNum == 1) nameBox.setText("Kyle");
+		else if(userNum == 2) nameBox.setText("Rachel");
+		
 		nameBox.setBounds(30, 470, 80, 30);
 		nameBox.setFont(new Font("Serif", Font.BOLD, 25));
 		nameBox.setForeground(Color.WHITE);
@@ -173,13 +177,42 @@ public class GUITest extends JFrame {
 	}
 	
 	public void showText() {
-		textBox.setText("<html><body>치킨 먹고싶다...<br>치킨은 역시 BBQ...<br>아니...! 땅땅 3번도 진리야</body></html>");
+		String text = game.getScript(currentId);
+		textBox.setText(text);
 		textBox.setBounds(30, 540, 480, 180);
 		textBox.setFont(new Font("Serif", Font.PLAIN, 30));
 		textBox.setVerticalAlignment(SwingConstants.TOP);
 		textBox.setHorizontalAlignment(SwingConstants.LEFT);
 		textBox.setForeground(Color.WHITE);
+		textBox.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				textBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				textBox.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if((currentId % 1000) < currentTotalNum) currentId++;
+				
+				textBox.setText(game.getScript(currentId));
+				setGraphic(game.getPlace(currentId));
+				musicListener(game.getBGM(currentId));
+				showName();
+			}
+
+		});
 		add(textBox);
+	}
+	
+	public void setGraphic(int num) {
+		if(num == 1) gameBackground = new ImageIcon(Main.class.getResource("../images/hotelRoom.png")).getImage();
+		else if(num == 2) gameBackground = new ImageIcon(Main.class.getResource("../images/lobby.png")).getImage();
+		
 	}
 	
 	public void paint(Graphics g) {
@@ -196,6 +229,34 @@ public class GUITest extends JFrame {
 		}
 		paintComponents(g);
 		this.repaint();
+	}
+	
+	
+	public void musicStart() {
+		backgroundMusic.start();
+	}
+	
+	public void musicEnd() {
+		backgroundMusic.close();
+	}
+	
+	public void musicListener(int num) {
+		if(currentMusic != num) {
+			if(num == 0) musicEnd();
+			if(num == 1) {
+				backgroundMusic = new Music("01_introMusic.mp3", true);
+				musicStart();
+			}
+			else if(num == 2) {
+				backgroundMusic = new Music("02_search.mp3", true);
+				musicStart();
+			}
+		}
+		currentMusic = num;
+	}
+	
+	public void musicListener() {
+		
 	}
 
 }
