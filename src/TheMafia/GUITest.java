@@ -11,6 +11,7 @@ public class GUITest extends JFrame {
 
 	private Image gameBackground = new ImageIcon(Main.class.getResource("../images/hotelRoom.png")).getImage();
 	private Image background = new ImageIcon(Main.class.getResource("../images/introbackground.jpg")).getImage();
+	private Image person = new ImageIcon(Main.class.getResource("../images/Neal.png")).getImage();
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.jpg")));
 
 	private ImageIcon exitButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/exitButton.jpg"));
@@ -35,6 +36,7 @@ public class GUITest extends JFrame {
 	private int currentId;
 	private int currentTotalNum;
 	private int currentMusic;
+	private int currentPerson;
 
 	GUITest() {
 		createMenu();
@@ -165,14 +167,16 @@ public class GUITest extends JFrame {
 	
 	public void showName(){
 		int userNum = game.getCharacter(currentId);
-		if(userNum == 1) nameBox.setText("Kyle");
-		else if(userNum == 2) nameBox.setText("Rachel");
-		else if(userNum == 3) nameBox.setText("Brad");
-		else if(userNum == 4) nameBox.setText("Erica");
-		else if(userNum == 5) nameBox.setText("Alex");
-		else if(userNum == 6) nameBox.setText("Neal");
+		if(userNum == 1) nameBox.setText(" ");
+		else if(userNum == 2 || userNum == 22) nameBox.setText("Kyle");
+		else if(userNum == 3 || userNum == 23) nameBox.setText("Rachael");
+		else if(userNum == 4) nameBox.setText("Brad");
+		else if(userNum == 7) nameBox.setText("Neal");
+		else if(userNum == 8) nameBox.setText("Alex");
+		else if(userNum == 9) nameBox.setText("Erica");
+		else nameBox.setText("? ? ?");
 		
-		nameBox.setBounds(30, 470, 80, 30);
+		nameBox.setBounds(30, 470, 120, 30);
 		nameBox.setFont(new Font("Serif", Font.BOLD, 25));
 		nameBox.setForeground(Color.WHITE);
 		add(nameBox);
@@ -181,8 +185,8 @@ public class GUITest extends JFrame {
 	public void showText() {
 		String text = game.getScript(currentId);
 		textBox.setText(text);
-		textBox.setBounds(30, 540, 480, 180);
-		textBox.setFont(new Font("Serif", Font.PLAIN, 30));
+		textBox.setBounds(25, 530, 440, 180);
+		textBox.setFont(new Font("Serif", Font.PLAIN, 26));
 		textBox.setVerticalAlignment(SwingConstants.TOP);
 		textBox.setHorizontalAlignment(SwingConstants.LEFT);
 		textBox.setForeground(Color.WHITE);
@@ -201,6 +205,7 @@ public class GUITest extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				if((currentId % 1000) < currentTotalNum) currentId = game.getNextId(currentId);
 				
+				currentPerson = game.getCharacter(currentId);
 				textBox.setText(game.getScript(currentId));
 				setGraphic(game.getPlace(currentId));
 				musicListener(game.getBGM(currentId));
@@ -212,9 +217,16 @@ public class GUITest extends JFrame {
 	}
 	
 	public void setGraphic(int num) {
-		if(num == 1) gameBackground = new ImageIcon(Main.class.getResource("../images/hotelRoom.png")).getImage();
-		else if(num == 2) gameBackground = new ImageIcon(Main.class.getResource("../images/lobby.png")).getImage();
-		
+		if(num == 1) gameBackground = new ImageIcon(Main.class.getResource("../images/dark.png")).getImage();
+		else if(num == 11) gameBackground = new ImageIcon(Main.class.getResource("../images/hotelRoom.png")).getImage();
+		else if(num == 12) gameBackground = new ImageIcon(Main.class.getResource("../images/corridor.png")).getImage();
+		else if(num == 13) gameBackground = new ImageIcon(Main.class.getResource("../images/hotelLobby.png")).getImage();
+		else if(num == 14) gameBackground = new ImageIcon(Main.class.getResource("../images/facilityRoom.png")).getImage();
+		else if(num == 15) gameBackground = new ImageIcon(Main.class.getResource("../images/cafeteria.png")).getImage();
+		else if(num == 16) gameBackground = new ImageIcon(Main.class.getResource("../images/hotelLobby.png")).getImage();
+		else if(num == 17) gameBackground = new ImageIcon(Main.class.getResource("../images/prison.png")).getImage();
+		else if(num == 18) gameBackground = new ImageIcon(Main.class.getResource("../images/outside.png")).getImage();
+		else gameBackground = new ImageIcon(Main.class.getResource("../images/dark.png")).getImage();
 	}
 	
 	public void paint(Graphics g) {
@@ -228,6 +240,33 @@ public class GUITest extends JFrame {
 		g.drawImage(background, 0, 30, null);
 		if(isGameScreen) {
 			g.drawImage(gameBackground, 0, 30, null);
+			if(currentPerson == 2) {
+				person = new ImageIcon(Main.class.getResource("../images/Kyle.png")).getImage();
+				g.drawImage(person, 220, 220, null);
+			}
+			else if(currentPerson == 3 || currentPerson == 13) {
+				person = new ImageIcon(Main.class.getResource("../images/Rachael.png")).getImage();
+				g.drawImage(person, 220, 220, null);
+			}
+			else if(currentPerson == 4 || currentPerson == 14) {
+				person = new ImageIcon(Main.class.getResource("../images/Brad.png")).getImage();
+				g.drawImage(person, 220, 220, null);
+			}
+			else if(currentPerson == 7 || currentPerson == 17) {
+				person = new ImageIcon(Main.class.getResource("../images/Neal.png")).getImage();
+				g.drawImage(person, 220, 220, null);
+			}
+			else if(currentPerson == 8 || currentPerson == 18) {
+				person = new ImageIcon(Main.class.getResource("../images/Alex.png")).getImage();
+				g.drawImage(person, 220, 220, null);
+			}
+			else if(currentPerson == 9 || currentPerson == 19) {
+				person = new ImageIcon(Main.class.getResource("../images/Erica.png")).getImage();
+				g.drawImage(person, 220, 220, null);
+			}
+			else {
+				
+			}
 		}
 		paintComponents(g);
 		this.repaint();
