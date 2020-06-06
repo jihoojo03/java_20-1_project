@@ -121,6 +121,9 @@ public class Game {
 		String ID = Integer.toString(id);
 		String nextId = "";
 		int intNextId = 0;
+		
+		if(id == 10302) return id++;
+		
 		for(int i=0;i<Row;i++) {
 			if(script[i][0].equals(ID)) {
 				if(i==Row-1) {

@@ -19,10 +19,13 @@ public class GUITest extends JFrame {
 	private ImageIcon startButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/startButtonEntered.jpg"));
 	private ImageIcon choiceButtonBasicImage = new ImageIcon(Main.class.getResource("../images/choiceButton.png"));
 	private ImageIcon choiceButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/choiceButtonSelected.png"));
-
+	
 	private JButton exitButton = new JButton(exitButtonEnteredImage);
 	private JButton startButton = new JButton(startButtonBasicImage);
-
+	private JButton choiceButton01 = new JButton(choiceButtonBasicImage);
+	private JButton choiceButton02 = new JButton(choiceButtonBasicImage);
+	private JButton choiceButton03 = new JButton(choiceButtonBasicImage);
+	
 	private JLabel textBox = new JLabel();
 	private JLabel nameBox = new JLabel();
 	
@@ -39,6 +42,9 @@ public class GUITest extends JFrame {
 	private int currentTotalNum;
 	private int currentMusic;
 	private int currentPerson;
+	private int lastChoice;
+	
+	private Selection selection = new Selection();
 
 	GUITest() {
 		
@@ -177,7 +183,8 @@ public class GUITest extends JFrame {
 		else if(userNum == 7) nameBox.setText("Neal");
 		else if(userNum == 8) nameBox.setText("Alex");
 		else if(userNum == 9) nameBox.setText("Erica");
-		else nameBox.setText("? ? ?");
+		else if(userNum == 13 || userNum == 14 || userNum == 17 || userNum == 18 || userNum == 19 || userNum == 6) nameBox.setText("? ? ?");
+		else nameBox.setText(" ");
 		
 		nameBox.setBounds(30, 470, 120, 30);
 		nameBox.setFont(new Font("Serif", Font.BOLD, 25));
@@ -206,7 +213,36 @@ public class GUITest extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if((currentId % 1000) < currentTotalNum) currentId = game.getNextId(currentId);
+				if((currentId / 10000) == 1) {			// 일반 대사
+					currentId = game.getNextId(currentId);
+				}
+				else if ((currentId / 10000) == 7) {	// 파트4, 파트5
+					if(currentId % 1000 == 1) currentPart = "4";
+					else if(currentId % 1000 == 2) currentPart = "5";
+					game.readCsv(currentPart);
+					currentId = game.getFirstId();
+					currentTotalNum = game.getTotalNum();
+				}
+				else if ((currentId / 10000) == 8) {	// 엔딩
+					startButton.setVisible(true);
+					musicListener(1);
+					textBox.setText(" ");
+					isGameScreen = false;
+				}
+				else if ((currentId / 10000) == 9) {	// 분기점
+					lastChoice = currentId;
+					choiceButton01.setVisible(true);
+					choiceButton02.setVisible(true);
+					choiceButton03.setVisible(true);
+					makeChoiceButton();
+				}
+				else if ((currentId % 10000) == 0) {
+					if(currentPart.equals("1")) currentPart = "2";
+					else if(currentPart.equals("2")) currentPart = "3";
+					game.readCsv(currentPart);
+					currentId = game.getFirstId();
+					currentTotalNum = game.getTotalNum();
+				}
 				
 				currentPerson = game.getCharacter(currentId);
 				textBox.setText(game.getScript(currentId));
@@ -219,6 +255,109 @@ public class GUITest extends JFrame {
 		add(textBox);
 	}
 	
+	public void makeChoiceButton() {
+		choiceButton01.setBounds(35, 120, 410, 80);
+		choiceButton01.setBorderPainted(false);
+		choiceButton01.setContentAreaFilled(false);
+		choiceButton01.setFocusPainted(false);
+		choiceButton01.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				choiceButton01.setIcon(choiceButtonEnteredImage);
+				choiceButton01.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				choiceButton01.setIcon(choiceButtonBasicImage);
+				choiceButton01.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				currentId = selection.getNextId(currentId, 1);
+				choiceButton01.setVisible(false);
+				choiceButton02.setVisible(false);
+				choiceButton03.setVisible(false);
+				currentPerson = game.getCharacter(currentId);
+				textBox.setText(game.getScript(currentId));
+				setGraphic(game.getPlace(currentId));
+				musicListener(game.getBGM(currentId));
+				showName();
+			}
+
+		});
+		add(choiceButton01);
+		
+		choiceButton02.setBounds(35, 240, 410, 80);
+		choiceButton02.setBorderPainted(false);
+		choiceButton02.setContentAreaFilled(false);
+		choiceButton02.setFocusPainted(false);
+		choiceButton02.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				choiceButton02.setIcon(choiceButtonEnteredImage);
+				choiceButton02.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				choiceButton02.setIcon(choiceButtonBasicImage);
+				choiceButton02.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				currentId = selection.getNextId(currentId, 2);
+				choiceButton01.setVisible(false);
+				choiceButton02.setVisible(false);
+				choiceButton03.setVisible(false);
+				currentPerson = game.getCharacter(currentId);
+				textBox.setText(game.getScript(currentId));
+				setGraphic(game.getPlace(currentId));
+				musicListener(game.getBGM(currentId));
+				showName();
+			}
+
+		});
+		add(choiceButton02);
+		
+		if(selection.getSelectionAmount(currentId) == 3) {
+			choiceButton03.setBounds(35, 360, 410, 80);
+			choiceButton03.setBorderPainted(false);
+			choiceButton03.setContentAreaFilled(false);
+			choiceButton03.setFocusPainted(false);
+			choiceButton03.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					choiceButton03.setIcon(choiceButtonEnteredImage);
+					choiceButton03.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				}
+	
+				@Override
+				public void mouseExited(MouseEvent e) {
+					choiceButton03.setIcon(choiceButtonBasicImage);
+					choiceButton03.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				}
+	
+				@Override
+				public void mousePressed(MouseEvent e) {
+					currentId = selection.getNextId(currentId, 3);
+					choiceButton01.setVisible(false);
+					choiceButton02.setVisible(false);
+					choiceButton03.setVisible(false);
+					currentPerson = game.getCharacter(currentId);
+					textBox.setText(game.getScript(currentId));
+					setGraphic(game.getPlace(currentId));
+					musicListener(game.getBGM(currentId));
+					showName();
+				}
+	
+			});
+			add(choiceButton03);
+		}
+	}
+	
 	public void setGraphic(int num) {
 		if(num == 1) gameBackground = new ImageIcon(Main.class.getResource("../images/dark.png")).getImage();
 		else if(num == 11) gameBackground = new ImageIcon(Main.class.getResource("../images/hotelRoom.png")).getImage();
@@ -226,7 +365,7 @@ public class GUITest extends JFrame {
 		else if(num == 13) gameBackground = new ImageIcon(Main.class.getResource("../images/hotelLobby.png")).getImage();
 		else if(num == 14) gameBackground = new ImageIcon(Main.class.getResource("../images/facilityRoom.png")).getImage();
 		else if(num == 15) gameBackground = new ImageIcon(Main.class.getResource("../images/cafeteria.png")).getImage();
-		else if(num == 16) gameBackground = new ImageIcon(Main.class.getResource("../images/hotelLobby.png")).getImage();
+		else if(num == 16) gameBackground = new ImageIcon(Main.class.getResource("../images/hotelOffice.png")).getImage();
 		else if(num == 17) gameBackground = new ImageIcon(Main.class.getResource("../images/prison.png")).getImage();
 		else if(num == 18) gameBackground = new ImageIcon(Main.class.getResource("../images/outside.png")).getImage();
 		else gameBackground = new ImageIcon(Main.class.getResource("../images/dark.png")).getImage();
