@@ -17,6 +17,8 @@ public class GUITest extends JFrame {
 	private ImageIcon exitButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/exitButton.jpg"));
 	private ImageIcon startButtonBasicImage = new ImageIcon(Main.class.getResource("../images/startButtonBasic.jpg"));
 	private ImageIcon startButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/startButtonEntered.jpg"));
+	private ImageIcon choiceButtonBasicImage = new ImageIcon(Main.class.getResource("../images/choiceButton.png"));
+	private ImageIcon choiceButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/choiceButtonSelected.png"));
 
 	private JButton exitButton = new JButton(exitButtonEnteredImage);
 	private JButton startButton = new JButton(startButtonBasicImage);
@@ -39,7 +41,7 @@ public class GUITest extends JFrame {
 	private int currentPerson;
 
 	GUITest() {
-		createMenu();
+		
 		setUndecorated(true);
 		setTitle("The Mafia");
 		setSize(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
@@ -50,6 +52,7 @@ public class GUITest extends JFrame {
 		setBackground(new Color(0, 0, 0, 0));
 		setLayout(null);
 		
+		createMenu();
 		musicStart();
 		makeExitButton();
 		makeMenuBar();
