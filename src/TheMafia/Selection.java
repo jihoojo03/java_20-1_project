@@ -52,8 +52,8 @@ public class Selection {
 	public int getSelectionAmount(int id) {
 		int num = id % 90000;
 		
-		if(totalNext[num-1][2] == 0) return 2;
-		else return 3;
+		if(totalNext[num-1][2] != 0) return 3;
+		else return 2;
 	}
 	
 }

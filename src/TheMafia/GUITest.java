@@ -213,7 +213,8 @@ public class GUITest extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if((currentId / 10000) == 1) {			// 일반 대사
+				if(currentId == 10302) currentId = 10303;
+				else if((currentId / 10000) == 1) {		// 일반 대사
 					currentId = game.getNextId(currentId);
 				}
 				else if ((currentId / 10000) == 7) {	// 파트4, 파트5
@@ -224,7 +225,7 @@ public class GUITest extends JFrame {
 					currentTotalNum = game.getTotalNum();
 				}
 				else if ((currentId / 10000) == 8) {	// 엔딩
-					startButton.setVisible(true);
+					// startButton.setVisible(true);
 					musicListener(1);
 					textBox.setText(" ");
 					isGameScreen = false;
@@ -368,6 +369,9 @@ public class GUITest extends JFrame {
 		else if(num == 16) gameBackground = new ImageIcon(Main.class.getResource("../images/hotelOffice.png")).getImage();
 		else if(num == 17) gameBackground = new ImageIcon(Main.class.getResource("../images/prison.png")).getImage();
 		else if(num == 18) gameBackground = new ImageIcon(Main.class.getResource("../images/outside.png")).getImage();
+		else if(num == 23) gameBackground = new ImageIcon(Main.class.getResource("../images/hotelLobbyDark.png")).getImage();
+		else if(num == 25) gameBackground = new ImageIcon(Main.class.getResource("../images/cafeteriaDark.png")).getImage();
+		else if(num == 26) gameBackground = new ImageIcon(Main.class.getResource("../images/facilityRoomDark.png")).getImage();
 		else gameBackground = new ImageIcon(Main.class.getResource("../images/dark.png")).getImage();
 	}
 	
@@ -384,11 +388,11 @@ public class GUITest extends JFrame {
 			g.drawImage(gameBackground, 0, 30, null);
 			if(currentPerson == 2) {
 				person = new ImageIcon(Main.class.getResource("../images/Kyle.png")).getImage();
-				g.drawImage(person, 220, 220, null);
+				g.drawImage(person, 190, 220, null);
 			}
 			else if(currentPerson == 3 || currentPerson == 13) {
 				person = new ImageIcon(Main.class.getResource("../images/Rachael.png")).getImage();
-				g.drawImage(person, 220, 220, null);
+				g.drawImage(person, 180, 220, null);
 			}
 			else if(currentPerson == 4 || currentPerson == 14) {
 				person = new ImageIcon(Main.class.getResource("../images/Brad.png")).getImage();
@@ -404,7 +408,7 @@ public class GUITest extends JFrame {
 			}
 			else if(currentPerson == 9 || currentPerson == 19) {
 				person = new ImageIcon(Main.class.getResource("../images/Erica.png")).getImage();
-				g.drawImage(person, 220, 220, null);
+				g.drawImage(person, 240, 220, null);
 			}
 			else {
 				
