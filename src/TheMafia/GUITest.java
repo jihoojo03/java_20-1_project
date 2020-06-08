@@ -79,15 +79,15 @@ public class GUITest extends JFrame {
 
 	public void createMenu() {
 		JMenuBar mb = new JMenuBar();
-		JMenu screenMenu01 = new JMenu("스토리");
-		JMenu screenMenu02 = new JMenu("저장 및 불러오기");
-		JMenu screenMenu03 = new JMenu("도움말");
+		JMenu screenMenu01 = new JMenu("Story");
+		JMenu screenMenu02 = new JMenu("Save & Load");
+		JMenu screenMenu03 = new JMenu("Help");
 
-		JMenuItem item01 = new JMenuItem("분기점 선택");
-		JMenuItem item02 = new JMenuItem("등장인물");
-		JMenuItem item03 = new JMenuItem("저장");
-		JMenuItem item04 = new JMenuItem("불러오기");
-		JMenuItem item05 = new JMenuItem("도움말");
+		JMenuItem item01 = new JMenuItem("Last Choice");
+		JMenuItem item02 = new JMenuItem("Characters");
+		JMenuItem item03 = new JMenuItem("Save");
+		JMenuItem item04 = new JMenuItem("Load");
+		JMenuItem item05 = new JMenuItem("Help");
 		JMenuItem item06 = new JMenuItem("Exit");
 		
 		item01.addMouseListener(new MouseAdapter() {
@@ -121,7 +121,7 @@ public class GUITest extends JFrame {
 				else if(lastChoiceId == 90011 && lastChoice == 1) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인 중 한명이 Rachael인 것 같다.</body></html>");
 				else if(lastChoiceId == 90011 && lastChoice == 2) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인 중 한명이 Erica인 것 같다.</body></html>");
 				else if(lastChoiceId == 90011 && lastChoice == 3) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인 중 한명이 제 3의 인물인 것 같다.</body></html>");
-				else JOptionPane.showMessageDialog(null, "분기점이 등장하지 않았거나, 새로 시작했습니다.");
+				else JOptionPane.showMessageDialog(null, "Either the diverging point did not appear, or it was a new start.");
 			}
 
 		});
@@ -327,22 +327,22 @@ public class GUITest extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if(currentId == 10302) currentId = 10303;
-				else if((currentId / 10000) == 1) {		// 일반 대사
+				else if((currentId / 10000) == 1) {		// Normal Script
 					currentId = game.getNextId(currentId);
 				}
-				else if ((currentId / 10000) == 7) {	// 파트4, 파트5
-					if(currentId % 1000 == 1) currentPart = "4";
-					else if(currentId % 1000 == 2) currentPart = "5";
+				else if ((currentId / 10000) == 7) {	// Diverging point to Part4, Part5
+					if(currentId % 70000 == 1) currentPart = "4";
+					else if(currentId % 70000 == 2) currentPart = "5";
 					game.readCsv(currentPart);
 					currentId = game.getFirstId();
 					currentTotalNum = game.getTotalNum();
 				}
-				else if ((currentId / 10000) == 8) {	// 엔딩
+				else if ((currentId / 10000) == 8) {	// Ending
 					retry = true;
 					musicListener(1);
 					textBox.setText(" ");
 				}
-				else if ((currentId / 10000) == 9) {	// 분기점
+				else if ((currentId / 10000) == 9) {	// Diverging point (Choice point)
 					lastChoiceId = currentId;
 					choiceButton01.setVisible(true);
 					choiceButton02.setVisible(true);
