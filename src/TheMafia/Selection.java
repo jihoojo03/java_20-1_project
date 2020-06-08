@@ -52,7 +52,6 @@ public class Selection {
 	public int getSelectionAmount(int id) {
 		int num = id % 10000;
 		
-		System.out.println(num);
 		if(num == 1 || num == 2 || num == 4 || num == 5 || num == 6) return 2;
 		else return 3;
 	}

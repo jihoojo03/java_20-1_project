@@ -64,7 +64,7 @@ public class GUITest extends JFrame {
 		setBackground(new Color(0, 0, 0, 0));
 		setLayout(null);
 		
-		currentPart = "3";
+		currentPart = "1";
 		game.readCsv(currentPart);
 		currentId = game.getFirstId();
 		currentTotalNum = game.getTotalNum();
@@ -153,6 +153,8 @@ public class GUITest extends JFrame {
 				
 				file.save_part(currentPart);
 				file.save(str, id);
+				
+				JOptionPane.showMessageDialog(null, "<html><body> 저장이 완료되었습니다. </body></html>");
 			}
 
 		});
@@ -162,10 +164,7 @@ public class GUITest extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				currentPart = file.getpart();
 				currentId = file.load();
-				System.out.println(file.getpart());
-				System.out.println(file.load());
 			}
-
 		});
 		
 		item05.addMouseListener(new MouseAdapter() {
@@ -278,9 +277,6 @@ public class GUITest extends JFrame {
 				isGameScreen = true;
 				if (retry == true) currentId = lastChoiceId;
 				
-				System.out.println(currentId);
-				System.out.println(currentTotalNum);
-				
 				showName();
 				showText();
 
@@ -343,7 +339,6 @@ public class GUITest extends JFrame {
 				}
 				else if ((currentId / 10000) == 8) {	// 엔딩
 					retry = true;
-					// startButton.setVisible(true);
 					musicListener(1);
 					textBox.setText(" ");
 				}

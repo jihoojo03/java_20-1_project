@@ -53,12 +53,6 @@ public class Game {
 		Row = row;
 		firstId = Integer.parseInt(script[0][0]);
 
-		for(int j=0;j<Row;j++) { //출력 확인 구문
-			for(i=0;i<Col;i++) {
-				System.out.print(script[j][i] + ",");
-			}
-			System.out.println("");
-		}
 	}
 	
 	public int getFirstId() {
