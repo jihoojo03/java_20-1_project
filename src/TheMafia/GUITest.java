@@ -28,6 +28,9 @@ public class GUITest extends JFrame {
 	
 	private JLabel textBox = new JLabel();
 	private JLabel nameBox = new JLabel();
+	private JLabel choiceBox01 = new JLabel();
+	private JLabel choiceBox02 = new JLabel();
+	private JLabel choiceBox03 = new JLabel();
 	
 	private Music backgroundMusic = new Music("01_introMusic.mp3", true);
 	
@@ -36,18 +39,21 @@ public class GUITest extends JFrame {
 	private int mouseX, mouseY;
 	
 	private boolean isGameScreen = false;
+	private boolean retry = false;
+	
+	private FileIO file = new FileIO();
 	
 	private String currentPart;
 	private int currentId;
 	private int currentTotalNum;
 	private int currentMusic;
 	private int currentPerson;
-	private int lastChoice;
+	private int lastChoiceId;
+	private int lastChoice = 0;
 	
 	private Selection selection = new Selection();
 
 	GUITest() {
-		
 		setUndecorated(true);
 		setTitle("The Mafia");
 		setSize(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
@@ -57,6 +63,11 @@ public class GUITest extends JFrame {
 		setVisible(true);
 		setBackground(new Color(0, 0, 0, 0));
 		setLayout(null);
+		
+		currentPart = "3";
+		game.readCsv(currentPart);
+		currentId = game.getFirstId();
+		currentTotalNum = game.getTotalNum();
 		
 		createMenu();
 		musicStart();
@@ -68,18 +79,127 @@ public class GUITest extends JFrame {
 
 	public void createMenu() {
 		JMenuBar mb = new JMenuBar();
-		JMenu screenMenu = new JMenu("스토리");
+		JMenu screenMenu01 = new JMenu("스토리");
+		JMenu screenMenu02 = new JMenu("저장 및 불러오기");
+		JMenu screenMenu03 = new JMenu("도움말");
 
-		screenMenu.add(new JMenuItem("진행상황"));
-		screenMenu.add(new JMenuItem("분기점 선택"));
-		screenMenu.add(new JMenuItem("등장인물"));
-		screenMenu.addSeparator();
-		screenMenu.add(new JMenuItem("Exit"));
+		JMenuItem item01 = new JMenuItem("분기점 선택");
+		JMenuItem item02 = new JMenuItem("등장인물");
+		JMenuItem item03 = new JMenuItem("저장");
+		JMenuItem item04 = new JMenuItem("불러오기");
+		JMenuItem item05 = new JMenuItem("도움말");
+		JMenuItem item06 = new JMenuItem("Exit");
+		
+		item01.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if(lastChoiceId == 90001 && lastChoice == 1) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 방에 다시 되돌아 오기를 선택했다.</body></html>");
+				else if(lastChoiceId == 90001 && lastChoice == 2) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 로비로 내려가서 사람들을 만나기로 했다.</body></html>");
+				else if(lastChoiceId == 90002 && lastChoice == 1) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 창문 밖으로 뛰어내리기로 선택했다.</body></html>");
+				else if(lastChoiceId == 90002 && lastChoice == 2) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 로비로 내려가서 사람들을 만나기로 했다.</body></html>");
+				else if(lastChoiceId == 90003 && lastChoice == 1) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인은 이 안에 있다고 이야기했다.</body></html>");
+				else if(lastChoiceId == 90003 && lastChoice == 2) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인은 외부인 이라고 이야기했다.</body></html>");
+				else if(lastChoiceId == 90003 && lastChoice == 3) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인은 귀신 이라고 이야기했다.</body></html>");
+				else if(lastChoiceId == 90004 && lastChoice == 1) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 설비실로 가야 한다고 이야기했다.</body></html>");
+				else if(lastChoiceId == 90004 && lastChoice == 2) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 여기서 기다려야 한다고 이야기했다.</body></html>");
+				else if(lastChoiceId == 90005 && lastChoice == 1) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 와인을 마시기로 했다.</body></html>");
+				else if(lastChoiceId == 90005 && lastChoice == 2) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 와인을 마시지 않기로 했다.</body></html>");
+				else if(lastChoiceId == 90006 && lastChoice == 1) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 와인을 마시지 말라고 이야기했다.</body></html>");
+				else if(lastChoiceId == 90006 && lastChoice == 2) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 가만히 있기로 했다.</body></html>");
+				else if(lastChoiceId == 90007 && lastChoice == 1) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인은 Brad라고 이야기했다.</body></html>");
+				else if(lastChoiceId == 90007 && lastChoice == 2) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인은 Erica라고 이야기했다.</body></html>");
+				else if(lastChoiceId == 90007 && lastChoice == 3) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인은 나라고 이야기했다.</body></html>");
+				else if(lastChoiceId == 90008 && lastChoice == 1) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인은 남자라고 이야기했다.</body></html>");
+				else if(lastChoiceId == 90008 && lastChoice == 2) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인은 여자라고 이야기했다.</body></html>");
+				else if(lastChoiceId == 90008 && lastChoice == 3) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인은 둘 다 인것 같다고 이야기했다.</body></html>");
+				else if(lastChoiceId == 90009 && lastChoice == 1) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인은 2명인 것 같다고 이야기했다.</body></html>");
+				else if(lastChoiceId == 90009 && lastChoice == 2) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인은 3명인 것 같다고 이야기했다.</body></html>");
+				else if(lastChoiceId == 90009 && lastChoice == 3) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인은 4명인 것 같다고 이야기했다.</body></html>");
+				else if(lastChoiceId == 90010 && lastChoice == 1) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인 중 한명이 Neal인 것 같다.</body></html>");
+				else if(lastChoiceId == 90010 && lastChoice == 2) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인 중 한명이 Brad인 것 같다.</body></html>");
+				else if(lastChoiceId == 90010 && lastChoice == 3) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인 중 한명이 Alex인 것 같다.</body></html>");
+				else if(lastChoiceId == 90011 && lastChoice == 1) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인 중 한명이 Rachael인 것 같다.</body></html>");
+				else if(lastChoiceId == 90011 && lastChoice == 2) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인 중 한명이 Erica인 것 같다.</body></html>");
+				else if(lastChoiceId == 90011 && lastChoice == 3) JOptionPane.showMessageDialog(null, "<html><body>[분기점 선택] <br> 범인 중 한명이 제 3의 인물인 것 같다.</body></html>");
+				else JOptionPane.showMessageDialog(null, "분기점이 등장하지 않았거나, 새로 시작했습니다.");
+			}
 
-		mb.add(screenMenu);
-		mb.add(new JMenu("편집"));
-		mb.add(new JMenu("실행"));
-		mb.add(new JMenu("도움말"));
+		});
+		
+		item02.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if(currentId < 10091) JOptionPane.showMessageDialog(null, "<html><body> 1. Kyle <br> 2. ? ? ? <br> 3. ? ? ? <br> 4. ? ? ? <br> 5. ? ? ? <br> 6. ? ? ? </body></html>");
+				else if(currentId < 10094) JOptionPane.showMessageDialog(null, "<html><body> 1. Kyle <br> 2. Rachael <br> 3. ? ? ? <br> 4. ? ? ? <br> 5. ? ? ? <br> 6. ? ? ? </body></html>");
+				else if(currentId < 10095) JOptionPane.showMessageDialog(null, "<html><body> 1. Kyle <br> 2. Rachael <br> 3. Brad <br> 4. ? ? ? <br> 5. ? ? ? <br> 6. ? ? ? </body></html>");
+				else if(currentId < 10098) JOptionPane.showMessageDialog(null, "<html><body> 1. Kyle <br> 2. Rachael <br> 3. Brad <br> 4. Erica <br> 5. ? ? ? <br> 6. ? ? ? </body></html>");
+				else if(currentId < 10118) JOptionPane.showMessageDialog(null, "<html><body> 1. Kyle <br> 2. Rachael <br> 3. Brad <br> 4. Erica <br> 5. Alex <br> 6. ? ? ? </body></html>");
+				else if(currentId < 10800) JOptionPane.showMessageDialog(null, "<html><body> 1. Kyle <br> 2. Rachael <br> 3. Brad <br> 4. Erica <br> 5. Alex <br> 6. Neal </body></html>");
+				if(currentId == 90001) JOptionPane.showMessageDialog(null, "<html><body> 1. Kyle <br> 2. ? ? ? <br> 3. ? ? ? <br> 4. ? ? ? <br> 5. ? ? ? <br> 6. ? ? ? </body></html>");
+				else if(currentId == 90002) JOptionPane.showMessageDialog(null, "<html><body> 1. Kyle <br> 2. ? ? ? <br> 3. ? ? ? <br> 4. ? ? ? <br> 5. ? ? ? <br> 6. ? ? ? </body></html>");
+				else if(currentId >= 90003) JOptionPane.showMessageDialog(null, "<html><body> 1. Kyle <br> 2. Rachael <br> 3. Brad <br> 4. Erica <br> 5. Alex <br> 6. Neal </body></html>");
+			}
+
+		});
+		
+		item03.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				String[] str = new String[1];
+				int[] id = new int[1];
+				
+				str[0] = game.getScript(currentId);
+				id[0] = currentId;
+				
+				file.save_part(currentPart);
+				file.save(str, id);
+			}
+
+		});
+		
+		item04.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				currentPart = file.getpart();
+				currentId = file.load();
+				System.out.println(file.getpart());
+				System.out.println(file.load());
+			}
+
+		});
+		
+		item05.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				JOptionPane.showMessageDialog(null, "<html><body> 1. 이 게임은 분기점 선택 스토리 게임입니다. <br> 2. 당신의 선택이 미래를 결과를 바꿉니다. <br> 3. 저장과 불러오기를 잘 활용하세요.</body></html>");
+			}
+
+		});
+		
+		item06.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+					Thread.sleep(500);
+				} catch(InterruptedException ex) {
+					ex.printStackTrace();
+				}
+				System.exit(0);
+			}
+		});
+		
+		screenMenu01.add(item01);
+		screenMenu01.add(item02);
+		screenMenu02.add(item03);
+		screenMenu02.add(item04);
+		screenMenu03.add(item05);
+		screenMenu03.addSeparator();
+		screenMenu03.add(item06);
+
+		mb.add(screenMenu01);
+		mb.add(screenMenu02);
+		mb.add(screenMenu03);
+
 		setJMenuBar(mb);
 	}
 	
@@ -156,11 +276,8 @@ public class GUITest extends JFrame {
 				startButton.setVisible(false);
 				musicEnd();
 				isGameScreen = true;
+				if (retry == true) currentId = lastChoiceId;
 				
-				currentPart = "1";
-				game.readCsv(currentPart);
-				currentId = game.getFirstId();
-				currentTotalNum = game.getTotalNum();
 				System.out.println(currentId);
 				System.out.println(currentTotalNum);
 				
@@ -225,16 +342,18 @@ public class GUITest extends JFrame {
 					currentTotalNum = game.getTotalNum();
 				}
 				else if ((currentId / 10000) == 8) {	// 엔딩
+					retry = true;
 					// startButton.setVisible(true);
 					musicListener(1);
 					textBox.setText(" ");
-					isGameScreen = false;
 				}
 				else if ((currentId / 10000) == 9) {	// 분기점
-					lastChoice = currentId;
+					lastChoiceId = currentId;
 					choiceButton01.setVisible(true);
 					choiceButton02.setVisible(true);
-					choiceButton03.setVisible(true);
+					if(selection.getSelectionAmount(currentId) == 3)
+						choiceButton03.setVisible(true);
+					showButtonText();
 					makeChoiceButton();
 				}
 				else if ((currentId % 10000) == 0) {
@@ -277,14 +396,19 @@ public class GUITest extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				currentId = selection.getNextId(currentId, 1);
+				lastChoice = 1;
 				choiceButton01.setVisible(false);
 				choiceButton02.setVisible(false);
 				choiceButton03.setVisible(false);
+				choiceBox01.setText(" ");
+				choiceBox02.setText(" ");
+				choiceBox03.setText(" ");
 				currentPerson = game.getCharacter(currentId);
 				textBox.setText(game.getScript(currentId));
 				setGraphic(game.getPlace(currentId));
 				musicListener(game.getBGM(currentId));
 				showName();
+				
 			}
 
 		});
@@ -310,9 +434,13 @@ public class GUITest extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				currentId = selection.getNextId(currentId, 2);
+				lastChoice = 2;
 				choiceButton01.setVisible(false);
 				choiceButton02.setVisible(false);
 				choiceButton03.setVisible(false);
+				choiceBox01.setText(" ");
+				choiceBox02.setText(" ");
+				choiceBox03.setText(" ");
 				currentPerson = game.getCharacter(currentId);
 				textBox.setText(game.getScript(currentId));
 				setGraphic(game.getPlace(currentId));
@@ -344,9 +472,13 @@ public class GUITest extends JFrame {
 				@Override
 				public void mousePressed(MouseEvent e) {
 					currentId = selection.getNextId(currentId, 3);
+					lastChoice = 3;
 					choiceButton01.setVisible(false);
 					choiceButton02.setVisible(false);
 					choiceButton03.setVisible(false);
+					choiceBox01.setText(" ");
+					choiceBox02.setText(" ");
+					choiceBox03.setText(" ");
 					currentPerson = game.getCharacter(currentId);
 					textBox.setText(game.getScript(currentId));
 					setGraphic(game.getPlace(currentId));
@@ -480,9 +612,72 @@ public class GUITest extends JFrame {
 				backgroundMusic = new Music("10_scary.mp3", true);
 				musicStart();
 			}
+			else if(num == 11) {
+				musicEnd();
+				backgroundMusic = new Music("11_funny.mp3", true);
+				musicStart();
+			}
 			
 		}
 		currentMusic = num;
+	}
+	
+	public void showButtonText(){
+		int userNum = currentId % 90000;
+		
+		if(userNum == 1) choiceBox01.setText("다시 방으로 돌아가자");
+		else if(userNum == 2) choiceBox01.setText("창문 밖으로 뛰어내린다");
+		else if(userNum == 3) choiceBox01.setText("범인은 이 안에 있다");
+		else if(userNum == 4) choiceBox01.setText("설비실로 가야 한다");
+		else if(userNum == 5) choiceBox01.setText("먹는다");
+		else if(userNum == 6) choiceBox01.setText("수상하니 마시지 말라고 말한다");
+		else if(userNum == 7) choiceBox01.setText("범인은 Brad");
+		else if(userNum == 8) choiceBox01.setText("남자");
+		else if(userNum == 9) choiceBox01.setText("2명");
+		else if(userNum == 10) choiceBox01.setText("Neal");
+		else if(userNum == 11) choiceBox01.setText("Rachael");
+		
+		choiceBox01.setVerticalAlignment(SwingConstants.CENTER);
+		choiceBox01.setHorizontalAlignment(SwingConstants.CENTER);
+		choiceBox01.setBounds(35, 120, 410, 80);
+		choiceBox01.setFont(new Font("Serif", Font.BOLD, 25));
+		choiceBox01.setForeground(Color.WHITE);
+		add(choiceBox01);
+		
+		
+		if(userNum == 1) choiceBox02.setText("로비로 내려간다");
+		else if(userNum == 2) choiceBox02.setText("로비로 가서 사람들을 만나본다");
+		else if(userNum == 3) choiceBox02.setText("범인은 외부인이다");
+		else if(userNum == 4) choiceBox02.setText("여기서 기다린다");
+		else if(userNum == 5) choiceBox02.setText("먹지 않는다");
+		else if(userNum == 6) choiceBox02.setText("가만히 있는다");
+		else if(userNum == 7) choiceBox02.setText("범인은 Erica");
+		else if(userNum == 8) choiceBox02.setText("여자");
+		else if(userNum == 9) choiceBox02.setText("3명");
+		else if(userNum == 10) choiceBox02.setText("Brad");
+		else if(userNum == 11) choiceBox02.setText("Erica");
+		
+		choiceBox02.setVerticalAlignment(SwingConstants.CENTER);
+		choiceBox02.setHorizontalAlignment(SwingConstants.CENTER);
+		choiceBox02.setBounds(35, 240, 410, 80);
+		choiceBox02.setFont(new Font("Serif", Font.BOLD, 25));
+		choiceBox02.setForeground(Color.WHITE);
+		add(choiceBox02);
+		
+		
+		if(userNum == 3) choiceBox03.setText("범인은 귀신이다");
+		else if(userNum == 7) choiceBox03.setText("범인은 바로 나");
+		else if(userNum == 8) choiceBox03.setText("둘 다");
+		else if(userNum == 9) choiceBox03.setText("4명");
+		else if(userNum == 10) choiceBox03.setText("Alex");
+		else if(userNum == 11) choiceBox03.setText("제 3의 인물");
+		
+		choiceBox03.setVerticalAlignment(SwingConstants.CENTER);
+		choiceBox03.setHorizontalAlignment(SwingConstants.CENTER);
+		choiceBox03.setBounds(35, 360, 410, 80);
+		choiceBox03.setFont(new Font("Serif", Font.BOLD, 25));
+		choiceBox03.setForeground(Color.WHITE);
+		add(choiceBox03);
 	}
 
 }
